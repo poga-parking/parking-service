@@ -1,0 +1,11 @@
+# Exclude all project files excepting the necessary ones to build the application
+
+**/*
+
+# Necessary files and directories
+!config/
+!gradle/
+!src/
+!build.gradle.kts
+!gradlew
+!settings.gradle.kts
