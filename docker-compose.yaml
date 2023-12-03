@@ -1,0 +1,12 @@
+version: '3.0'
+
+services:
+  postgresql:
+    image: postgres:12
+    container_name: parking-postgres
+    ports:
+      - "5421:5432"
+    environment:
+      - POSTGRES_DB=parking-service
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password

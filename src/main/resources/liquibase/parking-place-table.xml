@@ -1,0 +1,33 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="parking_place_id_seq" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="parking_place_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="parking_place_id_seq" incrementBy="1" cacheSize="50" startValue="1"/>
+    </changeSet>
+    <changeSet id="parking_place_statistics" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="parking_place"/>
+            </not>
+        </preConditions>
+        <createTable tableName="parking_place" remarks="Парковочное место">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="parking_place_id_seq" >
+                <constraints nullable="false" primaryKey="true" primaryKeyName="parking_places__id_idx"/>
+            </column>
+            <column name="place_number" type="TEXT" remarks="Номер места">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="TEXT" remarks="Статус места">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

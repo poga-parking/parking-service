@@ -2,6 +2,11 @@ naming:
   PackageNaming:
     active: false
 
+complexity:
+  LongParameterList:
+    constructorThreshold: 20
+
 performance:
   SpreadOperator:
     active: false
+

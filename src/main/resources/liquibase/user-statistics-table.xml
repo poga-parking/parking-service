@@ -1,0 +1,62 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="user_statistics_id_seq" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="user_statistics_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="user_statistics_id_seq" incrementBy="1" cacheSize="50" startValue="1"/>
+    </changeSet>
+    <changeSet id="user_statistics" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_statistics"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_statistics" remarks="Cтатистика парковок">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="user_statistics_id_seq" >
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_statistics__id_idx"/>
+            </column>
+            <column name="user_id" type="BIGINT" remarks="id пользователя">
+                <constraints nullable="false" referencedTableName="user" referencedColumnNames="id"
+                             foreignKeyName="user_statistics_id_idx"/>
+            </column>
+            <column name="place_id" type="BIGINT" remarks="id номер места на парковке">
+                <constraints nullable="false" referencedTableName="parking_place" referencedColumnNames="id"
+                             foreignKeyName="parking_place_id_idx"/>
+            </column>
+            <column name="car_brand" type="TEXT" remarks="Марка машины">
+                <constraints nullable="false"/>
+            </column>
+            <column name="car_plate" type="TEXT" remarks="Номер машины">
+                <constraints nullable="false"/>
+            </column>
+            <column name="arrival_date" defaultValueComputed="CURRENT_TIMESTAMP"
+                    type="TIMESTAMP WITHOUT TIME ZONE"
+                    remarks="Дата заезда">
+                <constraints nullable="false"/>
+            </column>
+            <column name="departure_date" defaultValueComputed="CURRENT_TIMESTAMP"
+                    type="TIMESTAMP WITHOUT TIME ZONE"
+                    remarks="Дата выезда">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="user-statistics-add-idx" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="car_plate__departure_date__composite_idx"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="user_statistics" indexName="car_plate__departure_date__composite_idx">
+            <column name="car_plate"/>
+            <column name="departure_date"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
