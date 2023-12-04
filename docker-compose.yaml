@@ -2,7 +2,19 @@
 version: '3.8'
 
 networks:
-  loki:
+  poga:
+
+x-healthcheck: &healthcheck
+  interval: 10s
+  timeout: 3s
+  retries: 5
+  start_period: 5s
+
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: 100m
+    tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
 
 services:
   parking-service:
@@ -14,16 +26,15 @@ services:
       - "8080:8080"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health"]
-      timeout: 10s
-      start_period: 10s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 100m
-        tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health"]
+      <<: *healthcheck
+    logging: *logging
+    environment:
+      DB_URL: jdbc:postgresql://parking-postgres:5432/parking-service
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
     networks:
-      - loki
+      - poga
 
   postgresql:
     image: postgres:12
@@ -34,3 +45,55 @@ services:
       - POSTGRES_DB=parking-service
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+    logging: *logging
+    networks:
+      - poga
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ${PWD}/config/prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.retention.time=14d'
+    logging: *logging
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --spider --timeout=1 http://localhost:9090/-/healthy || exit 1" ]
+      <<: *healthcheck
+    networks:
+      - poga
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      #      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ${PWD}/config/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ${PWD}/config/grafana/dashboards:/var/lib/grafana/dashboards
+    logging: *logging
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --spider --timeout=1 http://localhost:3000/api/health || exit 1" ]
+      <<: *healthcheck
+    networks:
+      - poga
+    deploy:
+      resources:
+        limits:
+          memory: 1g

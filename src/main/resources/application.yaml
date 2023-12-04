@@ -24,3 +24,16 @@ spring:
     password: ${DB_PASSWORD:password}
     hikari:
       maximum-pool-size: 10
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: metrics
+      exposure:
+        include: health,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
