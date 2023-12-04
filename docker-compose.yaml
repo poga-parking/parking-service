@@ -1,6 +1,30 @@
-version: '3.0'
+---
+version: '3.8'
+
+networks:
+  loki:
 
 services:
+  parking-service:
+    image: innoboys/parking-service:1.0.0
+    # Container name must not have underscores since
+    # Apache Tomcat cannot work with hostnames that contain underscores
+    container_name: parking-service
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health"]
+      timeout: 10s
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 100m
+        tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+    networks:
+      - loki
+
   postgresql:
     image: postgres:12
     container_name: parking-postgres
