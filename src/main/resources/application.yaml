@@ -37,3 +37,11 @@ management:
     metrics:
       export:
         enabled: true
+
+price-list:
+  - type: STUDENT
+    price: 15
+  - type: STAFF
+    price: 20
+  - type: GUEST
+    price: 25

@@ -10,6 +10,7 @@ import poga.parking.parkingservice.controller.model.ouput.FreePlacesOutputDto
 import poga.parking.parkingservice.controller.model.ouput.StatisticsOutputDto
 import poga.parking.parkingservice.entity.UserStatistics
 import poga.parking.parkingservice.enumeration.ParkingPlaceStatus
+import poga.parking.parkingservice.exception.NotFoundErrorException
 import poga.parking.parkingservice.repository.ParkingPlaceRepository
 import poga.parking.parkingservice.repository.UserRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
@@ -53,7 +54,7 @@ class PlaceService(
             .findById(statsId)
             .getOrNull()
             ?.apply { departureDate = Instant.now() }
-            ?: throw Exception()
+            ?: throw NotFoundErrorException("$statsId")
 
         val user = userStatistics.user
         val parkingPlace = userStatistics.parkingPlace ?: throw Exception()
@@ -62,7 +63,7 @@ class PlaceService(
             1. Сходить в конфиг за ценой по тарифу в зависимости от типа юзера
             2. Посчитать общую стоимость по времени пребывания
             3. Снять деньги в банке
-            4. Отпустить место и апдейтнуть таблицу
+            4. Отпустить место и апдейтнуть таблицу места
             5. Апдейтнеуть таблицу статы с новым departureDate
             7. В конце вернуть true, если ошибка => вернуть ошибку"""
         )
