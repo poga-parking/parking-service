@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import poga.parking.parkingservice.controller.model.ouput.StatisticsResponse
+import poga.parking.parkingservice.controller.model.ouput.StatisticsOutputDto
 import poga.parking.parkingservice.service.StatisticsService
 
 @RestController
@@ -23,5 +23,5 @@ class StatisticsController(
     fun getTotalStatistics(
         @RequestParam phoneNumber: String,
         @RequestParam isBookedNow: Boolean
-    ): ResponseEntity<List<StatisticsResponse>> = TODO("$phoneNumber $isBookedNow")
+    ): ResponseEntity<List<StatisticsOutputDto>> = TODO("$phoneNumber $isBookedNow")
 }

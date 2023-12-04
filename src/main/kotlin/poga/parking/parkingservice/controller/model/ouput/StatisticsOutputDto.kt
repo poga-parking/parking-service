@@ -2,7 +2,7 @@ package poga.parking.parkingservice.controller.model.ouput
 
 import java.time.Instant
 
-data class StatisticsResponse(
+data class StatisticsOutputDto(
     val bookId: Long,
     val placeNumber: Long,
     val carBrand: String,
