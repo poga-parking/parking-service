@@ -2,6 +2,7 @@ package poga.parking.parkingservice.controller
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import poga.parking.parkingservice.entity.ParkingPlace
 import poga.parking.parkingservice.entity.User
@@ -13,7 +14,8 @@ import poga.parking.parkingservice.repository.UserRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
 import java.time.Instant
 
-@RestController("/tech")
+@RestController
+@RequestMapping("/tech")
 class TechController(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val parkingPlaceRepository: ParkingPlaceRepository,
