@@ -6,19 +6,20 @@ import org.springframework.web.bind.annotation.RestController
 import poga.parking.parkingservice.entity.ParkingPlace
 import poga.parking.parkingservice.entity.User
 import poga.parking.parkingservice.entity.UserStatistics
-import poga.parking.parkingservice.enumeration.ParkingPlaceStatus.FREE
-import poga.parking.parkingservice.enumeration.UserType.STUDENT
+import poga.parking.parkingservice.enumeration.ParkingPlaceStatus
+import poga.parking.parkingservice.enumeration.UserType
 import poga.parking.parkingservice.repository.ParkingPlaceRepository
 import poga.parking.parkingservice.repository.UserRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
 import java.time.Instant
 
-@RestController
-class ParkingController(
+@RestController("/tech")
+class TechController(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val parkingPlaceRepository: ParkingPlaceRepository,
     @Autowired private val userStatisticsRepository: UserStatisticsRepository
 ) {
+
     @GetMapping("/test")
     fun test(): String {
         val user = User(
@@ -27,13 +28,13 @@ class ParkingController(
             secondName = "Zaripov",
             phoneNumber = "+79279388380",
             email = "e.zaripov@email.com",
-            type = STUDENT
+            type = UserType.STUDENT
         )
         userRepository.save(user)
 
         val parkingPlace = ParkingPlace(
             placeNumber = "15C",
-            status = FREE
+            status = ParkingPlaceStatus.FREE
         )
         parkingPlaceRepository.save(parkingPlace)
 
