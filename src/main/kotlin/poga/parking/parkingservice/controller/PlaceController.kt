@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import poga.parking.parkingservice.controller.model.input.BookPlaceRequest
 import poga.parking.parkingservice.controller.model.ouput.FreePlacesResponse
-import poga.parking.parkingservice.controller.model.ouput.StatisticsReponse
+import poga.parking.parkingservice.controller.model.ouput.StatisticsResponse
 import poga.parking.parkingservice.service.PlaceService
 import poga.parking.parkingservice.support.toHttpStatusCode
 
@@ -34,6 +34,6 @@ class PlaceController(
         TODO("$id")
 
     @GetMapping("/free/{id}")
-    fun getStatisticsAfterFreeUp(@PathVariable id: Long): ResponseEntity<StatisticsReponse> =
+    fun getStatisticsAfterFreeUp(@PathVariable id: Long): ResponseEntity<StatisticsResponse> =
         TODO("$id")
 }
