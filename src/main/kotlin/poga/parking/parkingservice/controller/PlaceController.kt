@@ -36,8 +36,8 @@ class PlaceController(
     fun bookPlace(request: BookPlaceRequest): ResponseEntity<Long> =
         TODO("$request")
 
-    @PostMapping("/free/{id}")
-    @Operation(summary = "Free up a parking place by user")
+    @PostMapping("/unbook/{id}")
+    @Operation(summary = "Unbook a parking place by user")
     fun freeUpPlace(@PathVariable id: Long): ResponseEntity<Boolean> =
         TODO("$id")
 
