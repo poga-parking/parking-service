@@ -26,7 +26,10 @@ services:
       - "8080:8080"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/health"]
+      test: [
+        "CMD-SHELL",
+        "curl -f http://localhost:8080/health"
+      ]
       <<: *healthcheck
     logging: *logging
     environment:
@@ -66,7 +69,10 @@ services:
       - '--storage.tsdb.retention.time=14d'
     logging: *logging
     healthcheck:
-      test: [ "CMD-SHELL", "wget --quiet --spider --timeout=1 http://localhost:9090/-/healthy || exit 1" ]
+      test: [
+        "CMD-SHELL",
+        "wget --quiet --spider --timeout=1 http://localhost:9090/-/healthy || exit 1"
+      ]
       <<: *healthcheck
     networks:
       - poga
@@ -89,7 +95,10 @@ services:
       - ${PWD}/config/grafana/dashboards:/var/lib/grafana/dashboards
     logging: *logging
     healthcheck:
-      test: [ "CMD-SHELL", "wget --quiet --spider --timeout=1 http://localhost:3000/api/health || exit 1" ]
+      test: [
+        "CMD-SHELL",
+        "wget --quiet --spider --timeout=1 http://localhost:3000/api/health || exit 1"
+      ]
       <<: *healthcheck
     networks:
       - poga

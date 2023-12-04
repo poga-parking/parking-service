@@ -38,9 +38,9 @@ class UserStatistics(
     var carPlate: String,
 
     @Column(name = "arrival_date", nullable = false)
-    var arrivalDate: Instant,
+    var arrivalDate: Instant = Instant.now(),
 
     @Column(name = "departure_date", nullable = true)
-    var departureDate: Instant,
+    var departureDate: Instant? = null,
 )
 

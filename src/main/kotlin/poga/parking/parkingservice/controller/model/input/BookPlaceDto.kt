@@ -6,5 +6,6 @@ data class BookPlaceDto(
     val carBrand: String,
     val carPlate: String,
     val phoneNumber: String,
-    val email: String
+    val email: String,
+    val placeNumber: String
 )

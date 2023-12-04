@@ -28,7 +28,7 @@ data class User(
     @Column(name = "second_name", nullable = false)
     var secondName: String,
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", unique = true, nullable = false)
     var phoneNumber: String,
 
     @Column(name = "email")

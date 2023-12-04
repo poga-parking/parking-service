@@ -12,7 +12,6 @@ import java.lang.Exception
 @RestControllerAdvice(basePackageClasses = [PlaceController::class, StatisticsController::class])
 class ExceptionHandlerAdvice {
 
-    // TODO: добавить адвайсы на все эксепшены
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleSomeException(exception: Exception): ErrorResponse =
