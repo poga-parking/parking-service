@@ -1,0 +1,55 @@
+name: parking service
+
+on:
+  push:
+
+env:
+  DOCKER_IMAGE_NAME: parking-service
+  DOCKER_IMAGE_TAG: latest
+
+jobs:
+  test-and-lint:
+    timeout-minutes: 30
+    runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Run check with Gradle Wrapper
+        run: ./gradlew check # lint and test are included into check gradle task
+      - name: Upload linter and tests results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-and-linter-reports
+          path: ./build/reports/
+
+  docker-build-and-push:
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    needs: [ test-and-lint ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
