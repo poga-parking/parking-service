@@ -1,5 +1,6 @@
 package poga.parking.parkingservice.service
 
+import io.micrometer.core.annotation.Timed
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -26,10 +27,12 @@ class PlaceService(
     @Autowired private val userStatisticsRepository: UserStatisticsRepository
 ) {
 
+    @Timed
     fun getFreePlaces(): FreePlacesOutputDto = parkingPlaceRepository
         .findAllByStatus(status = ParkingPlaceStatus.FREE)
         .toFreePlacesOutputDto()
 
+    @Timed
     fun bookPlace(bookPlaceDto: BookPlaceDto): Long {
         /* TODO: извлечь тип юзера из стороннего сервиса для тарификации;
                  также надо бы отдать полученную в конфиге цену юзеру */
@@ -48,6 +51,7 @@ class PlaceService(
         return userStatisticsRepository.save(userStatistics).id!!
     }
 
+    @Timed
     @Transactional(propagation = Propagation.REQUIRED)
     fun unbookPlace(statsId: Long): Boolean {
         val userStatistics = userStatisticsRepository
@@ -69,5 +73,6 @@ class PlaceService(
         )
     }
 
+    @Timed
     fun statisticsAfterFreeUp(@PathVariable id: Long): StatisticsOutputDto = TODO("$id")
 }
