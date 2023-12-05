@@ -39,9 +39,10 @@ management:
         enabled: true
 
 price-list:
-  - type: STUDENT
-    price: 15
-  - type: STAFF
-    price: 20
-  - type: GUEST
-    price: 25
+  price-rates:
+    - type: STUDENT
+      price: 15
+    - type: STAFF
+      price: 20
+    - type: GUEST
+      price: 25

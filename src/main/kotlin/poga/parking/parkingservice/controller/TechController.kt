@@ -25,9 +25,7 @@ class TechController(
 ) {
 
     @GetMapping("/properties")
-    fun properties() {
-        println(properties)
-    }
+    fun properties() = properties
 
     @GetMapping("/test")
     fun test(): String {

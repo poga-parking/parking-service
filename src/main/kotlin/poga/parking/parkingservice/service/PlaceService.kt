@@ -34,6 +34,7 @@ class PlaceService(
 
     @Timed
     fun bookPlace(bookPlaceDto: BookPlaceDto): Long {
+
         /* TODO: извлечь тип юзера из стороннего сервиса для тарификации;
                  также надо бы отдать полученную в конфиге цену юзеру */
         val user = bookPlaceDto.toUser().let { inputUser ->
