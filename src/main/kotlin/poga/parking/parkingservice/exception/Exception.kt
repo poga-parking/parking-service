@@ -1,7 +1,7 @@
 package poga.parking.parkingservice.exception
 
 open class ParkingServiceException(message: String) :
-    Exception(message = message)
+    Exception(message)
 
 open class InternalServerErrorException(message: String) :
     ParkingServiceException(message = message)

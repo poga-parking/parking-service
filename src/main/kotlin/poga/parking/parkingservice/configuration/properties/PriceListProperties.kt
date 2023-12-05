@@ -2,15 +2,14 @@ package poga.parking.parkingservice.configuration.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import poga.parking.parkingservice.enumeration.UserType
-import java.math.BigDecimal
+import kotlin.properties.Delegates
 
-@ConfigurationProperties
+@ConfigurationProperties("price-list")
 class PriceListProperties {
-
-    var
+    lateinit var priceRates: List<PriceRate>
 }
 
 class PriceRate {
     lateinit var type: UserType
-    lateinit var price: BigDecimal
+    var price by Delegates.notNull<Double>()
 }
