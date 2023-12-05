@@ -5,17 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.PathVariable
+import poga.parking.parkingservice.configuration.properties.PriceListProperties
 import poga.parking.parkingservice.controller.model.input.BookPlaceDto
 import poga.parking.parkingservice.controller.model.ouput.FreePlacesOutputDto
 import poga.parking.parkingservice.controller.model.ouput.StatisticsOutputDto
 import poga.parking.parkingservice.entity.UserStatistics
 import poga.parking.parkingservice.enumeration.ParkingPlaceStatus
+import poga.parking.parkingservice.exception.InternalServerErrorException
 import poga.parking.parkingservice.exception.NotFoundErrorException
 import poga.parking.parkingservice.repository.ParkingPlaceRepository
 import poga.parking.parkingservice.repository.UserRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
 import poga.parking.parkingservice.support.toFreePlacesOutputDto
+import poga.parking.parkingservice.support.toPriceList
 import poga.parking.parkingservice.support.toUser
 import java.time.Instant
 import kotlin.jvm.optionals.getOrNull
@@ -24,32 +26,28 @@ import kotlin.jvm.optionals.getOrNull
 class PlaceService(
     @Autowired private val parkingPlaceRepository: ParkingPlaceRepository,
     @Autowired private val userRepository: UserRepository,
-    @Autowired private val userStatisticsRepository: UserStatisticsRepository
+    @Autowired private val userStatisticsRepository: UserStatisticsRepository,
+    @Autowired private val userTypeService: UserTypeService,
+    @Autowired private val placeOccupierService: PlaceOccupierService,
+    @Autowired private val priceListProperties: PriceListProperties
 ) {
 
     @Timed
     fun getFreePlaces(): FreePlacesOutputDto = parkingPlaceRepository
         .findAllByStatus(status = ParkingPlaceStatus.FREE)
-        .toFreePlacesOutputDto()
+        .toFreePlacesOutputDto(priceList = priceListProperties.toPriceList())
 
     @Timed
     fun bookPlace(bookPlaceDto: BookPlaceDto): Long {
+        val user = bookPlaceDto.toUser()
+            .let { inputUser ->
+                userRepository.findByPhoneNumber(inputUser.phoneNumber)
+                    ?: userRepository.save(inputUser)
+            }.also {
+                it.type = userTypeService.userType(it)
+            }
 
-        /* TODO: извлечь тип юзера из стороннего сервиса для тарификации;
-                 также надо бы отдать полученную в конфиге цену юзеру */
-        val user = bookPlaceDto.toUser().let { inputUser ->
-            userRepository.findByPhoneNumber(inputUser.phoneNumber)
-                ?: userRepository.save(inputUser)
-        }
-        val userStatistics = bookPlaceDto.run {
-            UserStatistics(
-                user = user,
-                parkingPlace = parkingPlaceRepository.findByPlaceNumber(placeNumber),
-                carBrand = carBrand,
-                carPlate = carPlate,
-            )
-        }
-        return userStatisticsRepository.save(userStatistics).id!!
+        return placeOccupierService.occupyPlace(user = user, bookPlaceDto = bookPlaceDto)
     }
 
     @Timed
@@ -59,10 +57,11 @@ class PlaceService(
             .findById(statsId)
             .getOrNull()
             ?.apply { departureDate = Instant.now() }
-            ?: throw NotFoundErrorException("$statsId")
+            ?: throw NotFoundErrorException("User statistics with id $statsId is not found")
 
         val user = userStatistics.user
-        val parkingPlace = userStatistics.parkingPlace ?: throw Exception()
+        val parkingPlace = userStatistics.parkingPlace
+            ?: throw InternalServerErrorException("Parking place must not be null")
 
         TODO("""
             1. Сходить в конфиг за ценой по тарифу в зависимости от типа юзера
@@ -75,5 +74,5 @@ class PlaceService(
     }
 
     @Timed
-    fun statisticsAfterFreeUp(@PathVariable id: Long): StatisticsOutputDto = TODO("$id")
+    fun statisticsAfterFreeUp(statsId: Long): StatisticsOutputDto = TODO("$statsId")
 }

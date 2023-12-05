@@ -1,3 +1,4 @@
+---
 naming:
   PackageNaming:
     active: false
@@ -10,3 +11,6 @@ performance:
   SpreadOperator:
     active: false
 
+style:
+  ThrowsCount:
+    max: 5

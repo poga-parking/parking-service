@@ -56,7 +56,7 @@ class PlaceController(
     @Operation(summary = "Get statistics of a free parking place by id")
     fun statisticsAfterFreeUp(@PathVariable id: Long): ResponseEntity<StatisticsOutputDto> = {
         ResponseEntity(
-            placeService.statisticsAfterFreeUp(id = id),
+            placeService.statisticsAfterFreeUp(statsId = id),
             HttpStatus.OK.toHttpStatusCode()
         )
     }.withLogging(endpoint = GET_STATS_AFTER_FREE_UP_ENDPOINT, logger = logger)
