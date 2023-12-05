@@ -9,3 +9,6 @@
 !build.gradle.kts
 !gradlew
 !settings.gradle.kts
+
+# TODO: remove
+!build/libs/parking-service-0.0.1.jar

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import poga.parking.parkingservice.configuration.properties.PriceListProperties
 import poga.parking.parkingservice.entity.ParkingPlace
 import poga.parking.parkingservice.entity.User
 import poga.parking.parkingservice.entity.UserStatistics
@@ -19,8 +20,14 @@ import java.time.Instant
 class TechController(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val parkingPlaceRepository: ParkingPlaceRepository,
-    @Autowired private val userStatisticsRepository: UserStatisticsRepository
+    @Autowired private val userStatisticsRepository: UserStatisticsRepository,
+    @Autowired private val properties: PriceListProperties
 ) {
+
+    @GetMapping("/properties")
+    fun properties() {
+        println(properties)
+    }
 
     @GetMapping("/test")
     fun test(): String {

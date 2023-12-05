@@ -18,7 +18,7 @@ x-logging: &logging
 
 services:
   parking-service:
-    image: innoboys/parking-service:1.0.0
+    image: innoboys/parking-service:0.0.1
     # Container name must not have underscores since
     # Apache Tomcat cannot work with hostnames that contain underscores
     container_name: parking-service
