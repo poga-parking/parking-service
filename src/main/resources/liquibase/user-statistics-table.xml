@@ -29,6 +29,10 @@
                 <constraints nullable="false" referencedTableName="parking_place" referencedColumnNames="id"
                              foreignKeyName="parking_place_id_idx"/>
             </column>
+            <column name="user_transaction_id" type="BIGINT" remarks="id денежной транзакции">
+                <constraints nullable="true" referencedTableName="user_transaction_statistics" referencedColumnNames="id"
+                             foreignKeyName="user_transaction_id_idx"/>
+            </column>
             <column name="car_brand" type="TEXT" remarks="Марка машины">
                 <constraints nullable="false"/>
             </column>

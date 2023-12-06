@@ -45,6 +45,7 @@ class PlaceService(
                     ?: userRepository.save(inputUser)
             }.also {
                 it.type = userTypeService.userType(it)
+                userRepository.save(it)
             }
 
         return BookedPlaceOutputDto(
@@ -72,7 +73,7 @@ class PlaceService(
 
         val numberOfOccupiedHours = ChronoUnit.HOURS.between(userStatistics.arrivalDate, departureDate)
 
-        moneyService.calculateAndPayMoney(
+        val userTransactionStatistics = moneyService.calculateAndPayMoney(
             user,
             numberOfOccupiedHours
         )
@@ -81,6 +82,7 @@ class PlaceService(
             .apply {
                 this.departureDate = departureDate
                 this.parkingPlace?.status = FREE
+                this.userTransactionStatistics = userTransactionStatistics
             }
             .also { userStatisticsRepository.save(it) }
 

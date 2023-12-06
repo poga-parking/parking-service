@@ -1,5 +1,6 @@
 package poga.parking.parkingservice.controller.model.ouput
 
+import poga.parking.parkingservice.enumeration.UserType
 import java.time.Instant
 
 data class StatisticsOutputDto(
@@ -8,5 +9,8 @@ data class StatisticsOutputDto(
     val carBrand: String,
     val carPlate: String,
     val arrivalDate: Instant,
-    val departureDate: Instant?
+    val userType: UserType,
+    val departureDate: Instant?,
+    val priceRate: Double?,
+    val moneyAmount: Double?,
 )

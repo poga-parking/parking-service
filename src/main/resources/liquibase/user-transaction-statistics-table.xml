@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="user_transaction_statistics_id_seq" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="user_transaction_statistics_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="user_transaction_statistics_id_seq" incrementBy="1" cacheSize="50" startValue="1"/>
+    </changeSet>
+    <changeSet id="user_transaction_statistics" author="edikgoose">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_transaction_statistics"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_transaction_statistics" remarks="Денежные транзакции пользователя">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="user_transaction_statistics_id_seq" >
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_transaction_statistics__id_idx"/>
+            </column>
+            <column name="user_type" type="TEXT" remarks="Тип пользователя при оплате">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_rate" type="DOUBLE PRECISION" remarks="Тариф пользователя при оплате">
+                <constraints nullable="false"/>
+            </column>
+            <column name="money_amount" type="DOUBLE PRECISION" remarks="Сумма транзакции">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

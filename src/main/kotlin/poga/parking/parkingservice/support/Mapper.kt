@@ -43,5 +43,9 @@ fun UserStatistics.toStatisticsOutputDto(): StatisticsOutputDto =
         carBrand = this.carBrand,
         carPlate = this.carPlate,
         arrivalDate = this.arrivalDate,
-        departureDate = this.departureDate
+        departureDate = this.departureDate,
+        userType = this.user?.type
+            ?: throw InternalServerErrorException("User in statistics cannot be null"),
+        priceRate = this.userTransactionStatistics?.priceRate,
+        moneyAmount = this.userTransactionStatistics?.moneyAmount
     )

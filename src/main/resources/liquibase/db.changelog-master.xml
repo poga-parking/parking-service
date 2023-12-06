@@ -5,5 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <include file="liquibase/user-table.xml"/>
     <include file="liquibase/parking-place-table.xml"/>
+    <include file="liquibase/user-transaction-statistics-table.xml"/>
     <include file="liquibase/user-statistics-table.xml"/>
 </databaseChangeLog>

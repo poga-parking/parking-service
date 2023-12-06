@@ -31,6 +31,10 @@ class UserStatistics(
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     var parkingPlace: ParkingPlace? = null,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_transaction_id", referencedColumnName = "id")
+    var userTransactionStatistics: UserTransactionStatistics? = null,
+
     @Column(name = "car_brand", nullable = false)
     var carBrand: String,
 
