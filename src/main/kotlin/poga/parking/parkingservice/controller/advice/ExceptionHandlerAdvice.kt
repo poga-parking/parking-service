@@ -9,6 +9,7 @@ import poga.parking.parkingservice.controller.StatisticsController
 import poga.parking.parkingservice.controller.model.ouput.ErrorResponse
 import poga.parking.parkingservice.exception.InternalServerErrorException
 import poga.parking.parkingservice.exception.NotFoundErrorException
+import poga.parking.parkingservice.exception.ParkingPlaceAlreadyOccupiedException
 
 @RestControllerAdvice(basePackageClasses = [PlaceController::class, StatisticsController::class])
 class ExceptionHandlerAdvice {
@@ -25,5 +26,12 @@ class ExceptionHandlerAdvice {
     fun handleNotFoundErorException(exception: NotFoundErrorException): ErrorResponse =
         ErrorResponse(
             message = exception.message ?: "Something is not found"
+        )
+
+    @ExceptionHandler(ParkingPlaceAlreadyOccupiedException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handeParkingPlaceAlreadyOccupiedException(exception: ParkingPlaceAlreadyOccupiedException): ErrorResponse =
+        ErrorResponse(
+            message = exception.message ?: "Bad request"
         )
 }

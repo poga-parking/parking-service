@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 import poga.parking.parkingservice.controller.model.input.BookPlaceDto
 import poga.parking.parkingservice.entity.User
 import poga.parking.parkingservice.entity.UserStatistics
-import poga.parking.parkingservice.enumeration.ParkingPlaceStatus
+import poga.parking.parkingservice.enumeration.ParkingPlaceStatus.BOOKED
 import poga.parking.parkingservice.exception.InternalServerErrorException
 import poga.parking.parkingservice.exception.NotFoundErrorException
+import poga.parking.parkingservice.exception.ParkingPlaceAlreadyOccupiedException
 import poga.parking.parkingservice.repository.ParkingPlaceRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
 
@@ -24,6 +25,10 @@ class PlaceOccupierService(
         val parkingPlace = parkingPlaceRepository.findByPlaceNumber(bookPlaceDto.placeNumber)
             ?: throw NotFoundErrorException("Parking place with number ${bookPlaceDto.placeNumber} is not found")
 
+        if (parkingPlace.status == BOOKED) {
+            throw ParkingPlaceAlreadyOccupiedException(parkingPlace.placeNumber)
+        }
+
         val userStatistics = UserStatistics(
             user = user,
             parkingPlace = parkingPlace,
@@ -31,7 +36,7 @@ class PlaceOccupierService(
             carPlate = bookPlaceDto.carPlate,
         )
         parkingPlaceRepository.updateStatusById(
-            status = ParkingPlaceStatus.BOOKED,
+            status = BOOKED,
             id = parkingPlace.id ?: throw InternalServerErrorException("Parking place id must not be null")
         )
 

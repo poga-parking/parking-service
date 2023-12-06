@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import poga.parking.parkingservice.controller.model.input.BookPlaceDto
+import poga.parking.parkingservice.controller.model.ouput.BookedPlaceOutputDto
 import poga.parking.parkingservice.controller.model.ouput.FreePlacesOutputDto
 import poga.parking.parkingservice.controller.model.ouput.StatisticsOutputDto
 import poga.parking.parkingservice.service.PlaceService
@@ -36,7 +37,7 @@ class PlaceController(
 
     @PostMapping("/book")
     @Operation(summary = "Book a parking place by user")
-    fun bookPlace(bookPlaceDto: BookPlaceDto): ResponseEntity<Long> = {
+    fun bookPlace(bookPlaceDto: BookPlaceDto): ResponseEntity<BookedPlaceOutputDto> = {
         ResponseEntity(
             placeService.bookPlace(bookPlaceDto = bookPlaceDto),
             HttpStatus.OK.toHttpStatusCode()
