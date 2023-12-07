@@ -34,6 +34,9 @@ data class User(
     @Column(name = "email")
     var email: String? = null,
 
+    @Column(name = "password")
+    var password: String?,
+
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     var type: UserType

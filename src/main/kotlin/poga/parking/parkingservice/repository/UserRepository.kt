@@ -7,5 +7,7 @@ import poga.parking.parkingservice.entity.User
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
 
-    fun findByPhoneNumber(phoneNumber: String): User?
+    fun findByEmail(email: String): User?
+
+    fun findByEmailAndPassword(email: String, password: String): User?
 }

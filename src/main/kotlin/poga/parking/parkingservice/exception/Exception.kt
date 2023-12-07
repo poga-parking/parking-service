@@ -12,3 +12,6 @@ open class InternalServerErrorException(message: String) :
 open class NotFoundErrorException(message: String) :
     ParkingServiceException(message = message)
 
+open class InvalidCreditsException(message: String) :
+    Exception(message)
+

@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional
 import poga.parking.parkingservice.controller.model.input.BookPlaceDto
 import poga.parking.parkingservice.controller.model.ouput.BookedPlaceOutputDto
 import poga.parking.parkingservice.controller.model.ouput.FreePlacesOutputDto
-import poga.parking.parkingservice.controller.model.ouput.StatisticsOutputDto
 import poga.parking.parkingservice.enumeration.ParkingPlaceStatus.FREE
 import poga.parking.parkingservice.exception.InternalServerErrorException
 import poga.parking.parkingservice.exception.NotFoundErrorException
@@ -17,7 +16,6 @@ import poga.parking.parkingservice.repository.UserRepository
 import poga.parking.parkingservice.repository.UserStatisticsRepository
 import poga.parking.parkingservice.service.money.MoneyService
 import poga.parking.parkingservice.support.toFreePlacesOutputDto
-import poga.parking.parkingservice.support.toUser
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.jvm.optionals.getOrNull
@@ -39,10 +37,10 @@ class PlaceService(
 
     @Timed
     fun bookPlace(bookPlaceDto: BookPlaceDto): BookedPlaceOutputDto {
-        val user = bookPlaceDto.toUser()
-            .let { inputUser ->
-                userRepository.findByPhoneNumber(inputUser.phoneNumber)
-                    ?: userRepository.save(inputUser)
+        val user = bookPlaceDto
+            .let { dto ->
+                userRepository.findByEmail(dto.email)
+                    ?: throw NotFoundErrorException("User with email ${dto.email} not found")
             }.also {
                 it.type = userTypeService.userType(it)
                 userRepository.save(it)
@@ -88,7 +86,4 @@ class PlaceService(
 
         return true
     }
-
-    @Timed
-    fun statisticsAfterFreeUp(statsId: Long): StatisticsOutputDto = TODO("$statsId")
 }

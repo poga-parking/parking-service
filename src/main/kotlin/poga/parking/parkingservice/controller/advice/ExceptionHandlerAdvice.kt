@@ -8,6 +8,7 @@ import poga.parking.parkingservice.controller.PlaceController
 import poga.parking.parkingservice.controller.StatisticsController
 import poga.parking.parkingservice.controller.model.ouput.ErrorResponse
 import poga.parking.parkingservice.exception.InternalServerErrorException
+import poga.parking.parkingservice.exception.InvalidCreditsException
 import poga.parking.parkingservice.exception.NotFoundErrorException
 import poga.parking.parkingservice.exception.ParkingPlaceAlreadyOccupiedException
 
@@ -30,7 +31,14 @@ class ExceptionHandlerAdvice {
 
     @ExceptionHandler(ParkingPlaceAlreadyOccupiedException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handeParkingPlaceAlreadyOccupiedException(exception: ParkingPlaceAlreadyOccupiedException): ErrorResponse =
+    fun handleParkingPlaceAlreadyOccupiedException(exception: ParkingPlaceAlreadyOccupiedException): ErrorResponse =
+        ErrorResponse(
+            message = exception.message ?: "Bad request"
+        )
+
+    @ExceptionHandler(InvalidCreditsException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleInvalidCreditsException(exception: InvalidCreditsException): ErrorResponse =
         ErrorResponse(
             message = exception.message ?: "Bad request"
         )
