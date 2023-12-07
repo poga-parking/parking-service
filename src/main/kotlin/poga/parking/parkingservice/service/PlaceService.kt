@@ -66,6 +66,10 @@ class PlaceService(
             .getOrNull()
             ?: throw NotFoundErrorException("User statistics with id $statsId is not found")
 
+        if (userStatistics.departureDate != null) {
+            throw NotFoundErrorException("Active books with such id $statsId not found")
+        }
+
         val user = userStatistics.user
             ?: throw InternalServerErrorException("User statistics ${userStatistics.id} doesn't have user")
 
