@@ -24,7 +24,7 @@ class MoneyService(
         user
             .type.getPrice()
             .also {
-                val moneyAmount = (MINUTES_IN_HOUR / it) * minutes
+                val moneyAmount = (it / MINUTES_IN_HOUR) * minutes
                 paymentMethod.pay(user, moneyAmount)
 
                 return userTransactionStatisticsRepository.save(
