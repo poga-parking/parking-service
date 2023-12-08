@@ -15,9 +15,8 @@ class UserTypeService {
      * @return type of user in system
      */
     fun userType(user: User): UserType = when {
-        user.email == null -> UserType.GUEST
-        user.email!!.endsWith("@innopolis.university") -> UserType.STUDENT
-        user.email!!.endsWith("@innopolis.ru") -> UserType.STAFF
+        user.email.endsWith("@innopolis.university") -> UserType.STUDENT
+        user.email.endsWith("@innopolis.ru") -> UserType.STAFF
         else -> UserType.GUEST
     }
 }

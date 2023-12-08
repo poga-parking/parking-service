@@ -5,9 +5,4 @@ import org.springframework.stereotype.Repository
 import poga.parking.parkingservice.entity.User
 
 @Repository
-interface UserRepository : JpaRepository<User, Long> {
-
-    fun findByEmail(email: String): User?
-
-    fun findByEmailAndPassword(email: String, password: String): User?
-}
+interface UserRepository : JpaRepository<User, String>

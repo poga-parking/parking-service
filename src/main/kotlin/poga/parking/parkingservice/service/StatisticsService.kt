@@ -14,12 +14,12 @@ class StatisticsService(
 
     @Timed
     fun totalStatistics(
-        phoneNumber: String,
+        uid: String,
         bookedNow: Boolean
     ): List<StatisticsOutputDto> =
         statisticsRepository
             .findAll()
-            .filter { it.user?.phoneNumber == phoneNumber }
+            .filter { it.user?.id == uid }
             .filter { !bookedNow || (bookedNow && it.departureDate == null) }
             .map { it.toStatisticsOutputDto() }
 }

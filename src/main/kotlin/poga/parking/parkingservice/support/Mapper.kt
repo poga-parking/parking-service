@@ -45,20 +45,19 @@ fun UserStatistics.toStatisticsOutputDto(): StatisticsOutputDto =
 
 fun UserInputDto.toUser(): User =
     User(
-        id = null,
+        id = this.uid,
+        email = this.email,
         firstName = this.firstName,
         secondName = this.secondName,
         phoneNumber = this.phoneNumber,
-        email = this.email,
-        password = this.password,
         type = GUEST,
     )
 
 fun User.toUserOutputDto(): UserOutputDto =
     UserOutputDto(
-        id = this.id ?: throw InternalServerErrorException("id in user cannot be null"),
+        uid = this.id,
+        email = this.email,
         firstName = this.firstName,
         secondName = this.secondName,
-        phoneNumber = this.phoneNumber,
-        email = this.email ?: throw InternalServerErrorException("email cannot be null")
+        phoneNumber = this.phoneNumber
     )

@@ -40,7 +40,7 @@ class MoneyService(
 
     fun getPriceList(): PriceList = priceListProperties.toPriceList()
 
-    private fun UserType.getPrice(): Double =
+    fun UserType.getPrice(): Double =
         priceListProperties.priceRates
             .filter { priceRate -> priceRate.type == this }
             .map { priceRate -> priceRate.price }

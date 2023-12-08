@@ -39,8 +39,8 @@ class PlaceService(
     fun bookPlace(bookPlaceDto: BookPlaceDto): BookedPlaceOutputDto {
         val user = bookPlaceDto
             .let { dto ->
-                userRepository.findByEmail(dto.email)
-                    ?: throw NotFoundErrorException("User with email ${dto.email} not found")
+                userRepository.findById(dto.uid).getOrNull()
+                    ?: throw NotFoundErrorException("User with id(${dto.uid}) not found")
             }.also {
                 it.type = userTypeService.userType(it)
                 userRepository.save(it)

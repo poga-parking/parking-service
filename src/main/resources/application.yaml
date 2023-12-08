@@ -16,7 +16,7 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:liquibase/db.changelog-master.xml
-    drop-first: false
+    drop-first: ${DB_DROP_FIRST:false}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DB_URL:jdbc:postgresql://localhost:5421/parking-service}

@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import poga.parking.parkingservice.controller.PlaceController
-import poga.parking.parkingservice.controller.StatisticsController
+import poga.parking.parkingservice.controller.UserController
 import poga.parking.parkingservice.controller.model.ouput.ErrorResponse
 import poga.parking.parkingservice.exception.InternalServerErrorException
 import poga.parking.parkingservice.exception.InvalidCreditsException
 import poga.parking.parkingservice.exception.NotFoundErrorException
 import poga.parking.parkingservice.exception.ParkingPlaceAlreadyOccupiedException
 
-@RestControllerAdvice(basePackageClasses = [PlaceController::class, StatisticsController::class])
+@RestControllerAdvice(basePackageClasses = [PlaceController::class, UserController::class])
 class ExceptionHandlerAdvice {
 
     @ExceptionHandler(InternalServerErrorException::class)

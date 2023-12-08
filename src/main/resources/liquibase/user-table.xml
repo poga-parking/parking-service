@@ -3,14 +3,6 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet id="user_id_seq" author="edikgoose">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="user_id_seq"/>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="user_id_seq" incrementBy="1" cacheSize="50" startValue="1"/>
-    </changeSet>
     <changeSet id="user" author="edikgoose">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -18,19 +10,15 @@
             </not>
         </preConditions>
         <createTable tableName="user" remarks="Пользователь">
-            <column name="id" type="BIGINT" defaultValueSequenceNext="user_id_seq" >
+            <column name="id" type="TEXT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user__id_idx"/>
             </column>
-            <column name="first_name" type="TEXT" remarks="Имя пользователя">
+            <column name="first_name" type="TEXT" remarks="Имя пользователя"/>
+            <column name="second_name" type="TEXT" remarks="Фамилия пользователя"/>
+            <column name="phone_number" type="TEXT" remarks="Номер телефона"/>
+            <column name="email" type="TEXT" remarks="Электронная почта">
                 <constraints nullable="false"/>
             </column>
-            <column name="second_name" type="TEXT" remarks="Фамилия пользователя">
-                <constraints nullable="false"/>
-            </column>
-            <column name="phone_number" type="TEXT" remarks="Номер телефона">
-                <constraints nullable="false"/>
-            </column>
-            <column name="email" type="TEXT" remarks="Электронная почта"/>
             <column name="type" type="TEXT" remarks="Тип пользователя"/>
         </createTable>
     </changeSet>

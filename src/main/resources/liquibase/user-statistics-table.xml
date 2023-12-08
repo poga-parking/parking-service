@@ -21,7 +21,7 @@
             <column name="id" type="BIGINT" defaultValueSequenceNext="user_statistics_id_seq" >
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user_statistics__id_idx"/>
             </column>
-            <column name="user_id" type="BIGINT" remarks="id пользователя">
+            <column name="user_id" type="TEXT" remarks="id пользователя">
                 <constraints nullable="false" referencedTableName="user" referencedColumnNames="id"
                              foreignKeyName="user_statistics_id_idx"/>
             </column>
