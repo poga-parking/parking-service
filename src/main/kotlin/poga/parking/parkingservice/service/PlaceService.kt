@@ -73,11 +73,11 @@ class PlaceService(
         val user = userStatistics.user
             ?: throw InternalServerErrorException("User statistics ${userStatistics.id} doesn't have user")
 
-        val numberOfOccupiedHours = ChronoUnit.HOURS.between(userStatistics.arrivalDate, departureDate)
+        val numberOfOccupiedMinutes = ChronoUnit.MINUTES.between(userStatistics.arrivalDate, departureDate)
 
         val userTransactionStatistics = moneyService.calculateAndPayMoney(
             user,
-            numberOfOccupiedHours
+            numberOfOccupiedMinutes
         )
 
         userStatistics

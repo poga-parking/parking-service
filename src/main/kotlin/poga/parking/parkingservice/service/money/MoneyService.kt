@@ -20,12 +20,12 @@ class MoneyService(
     @Autowired private val userTransactionStatisticsRepository: UserTransactionStatisticsRepository
 ) {
     @Transactional
-    fun calculateAndPayMoney(user: User, hours: Long): UserTransactionStatistics {
+    fun calculateAndPayMoney(user: User, minutes: Long): UserTransactionStatistics {
         user
             .type.getPrice()
             .also {
-                val moneyAmount = it * hours
-                paymentMethod.pay(user, it * hours)
+                val moneyAmount = (MINUTES_IN_HOUR / it) * minutes
+                paymentMethod.pay(user, moneyAmount)
 
                 return userTransactionStatisticsRepository.save(
                     UserTransactionStatistics(
@@ -45,4 +45,8 @@ class MoneyService(
             .filter { priceRate -> priceRate.type == this }
             .map { priceRate -> priceRate.price }
             .first()
+
+    companion object {
+        const val MINUTES_IN_HOUR = 60f
+    }
 }

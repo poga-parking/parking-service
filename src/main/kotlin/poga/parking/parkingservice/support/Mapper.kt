@@ -41,7 +41,7 @@ fun UserStatistics.toStatisticsOutputDto(): StatisticsOutputDto =
         userType = this.user?.type
             ?: throw InternalServerErrorException("User in statistics cannot be null"),
         priceRate = this.userTransactionStatistics?.priceRate,
-        moneyAmount = this.userTransactionStatistics?.moneyAmount
+        moneyAmount = this.userTransactionStatistics?.moneyAmount,
     )
 
 fun UserInputDto.toUser(): User =
