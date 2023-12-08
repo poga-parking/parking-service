@@ -12,6 +12,7 @@ import poga.parking.parkingservice.entity.User
 import poga.parking.parkingservice.entity.UserStatistics
 import poga.parking.parkingservice.enumeration.UserType.GUEST
 import poga.parking.parkingservice.exception.InternalServerErrorException
+import poga.parking.parkingservice.exception.ParkingServiceException
 
 fun List<ParkingPlace>.toFreePlacesOutputDto(priceList: PriceList) = FreePlacesOutputDto(
     places = map { it.placeNumber },
@@ -45,8 +46,8 @@ fun UserStatistics.toStatisticsOutputDto(): StatisticsOutputDto =
 
 fun UserInputDto.toUser(): User =
     User(
-        id = this.uid,
-        email = this.email,
+        id = this.uid ?: throw ParkingServiceException(""),
+        email = this.email ?: throw ParkingServiceException(""),
         firstName = this.firstName,
         secondName = this.secondName,
         phoneNumber = this.phoneNumber,

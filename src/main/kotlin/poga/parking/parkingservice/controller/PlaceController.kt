@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import poga.parking.parkingservice.controller.model.input.BookPlaceDto
@@ -34,9 +36,9 @@ class PlaceController(
         )
     }.withLogging(endpoint = GET_FREE_PLACES_ENDPOINT, logger = logger)
 
-    @PostMapping("/book")
+    @PostMapping("/book", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Book a parking place by user")
-    fun bookPlace(bookPlaceDto: BookPlaceDto): ResponseEntity<BookedPlaceOutputDto> = {
+    fun bookPlace(@RequestBody bookPlaceDto: BookPlaceDto): ResponseEntity<BookedPlaceOutputDto> = {
         ResponseEntity(
             placeService.bookPlace(bookPlaceDto = bookPlaceDto),
             HttpStatus.OK.toHttpStatusCode()
